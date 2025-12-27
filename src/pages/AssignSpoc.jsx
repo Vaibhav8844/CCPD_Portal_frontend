@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { api } from "../api/client";
 import { useAuth } from "../auth/AuthContext";
+import "./styles/AssignSpoc.css";
 
 export default function AssignSpoc() {
   const { token } = useAuth();
@@ -27,83 +28,96 @@ export default function AssignSpoc() {
   };
 
   const assign = async () => {
-  if (!company) {
-    alert("Company is required");
-    return;
-  }
-
-  if (!selected || !selected.email) {
-    alert("Please select a SPOC from suggestions");
-    return;
-  }
-
-  console.log("Assigning:", company, selected.email); // 🔍 DEBUG
-
-  await api.post(
-    "/companies/assign",
-    {
-      company,
-      spoc_email: selected.email, // ✅ guaranteed now
-    },
-    {
-      headers: { Authorization: `Bearer ${token}` },
+    if (!company) {
+      alert("Company is required");
+      return;
     }
-  );
 
-  alert("SPOC assigned successfully");
+    if (!selected || !selected.email) {
+      alert("Please select a SPOC from suggestions");
+      return;
+    }
 
-  // reset
-  setCompany("");
-  setQuery("");
-  setSelected(null);
-  setResults([]);
-};
+    console.log("Assigning:", company, selected.email); // 🔍 DEBUG
 
+    await api.post(
+      "/companies/assign",
+      {
+        company,
+        spoc_email: selected.email, // ✅ guaranteed now
+      },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+
+    alert("SPOC assigned successfully");
+
+    // reset
+    setCompany("");
+    setQuery("");
+    setSelected(null);
+    setResults([]);
+  };
 
   return (
-    <div>
-      <h2>Assign SPOC</h2>
+    <div className="assign-spoc-wrapper">
+      <div className="assign-spoc-card">
+        <div className="assign-header">
+          <span className="assign-icon">🧑‍💼</span>
+          <h2>Assign SPOC</h2>
+        </div>
 
-      <input
-        placeholder="Company Name"
-        value={company}
-        onChange={e => setCompany(e.target.value)}
-      />
-      <br /><br />
-
-      <input
-        placeholder="Type SPOC name"
-        value={query}
-        onChange={e => search(e.target.value)}
-      />
-
-      {/* Suggestions */}
-      {results.length > 0 && (
-        <ul style={{ border: "1px solid #ccc", maxWidth: 300 }}>
-          {results.map((u, i) => (
-            <li
-              key={i}
-              style={{ cursor: "pointer", padding: 4 }}
-              onClick={() => {
-                setSelected(u);
-                setQuery(u.name);
-                setResults([]);
-              }}
-            >
-              {u.name} ({u.email})
-            </li>
-          ))}
-        </ul>
-      )}
-
-      {selected && (
-        <p>
-          Selected: <b>{selected.name}</b>
+        <p className="subtitle">
+          🔗 Link a company with its Single Point of Contact
         </p>
-      )}
 
-      <br />
-      <button onClick={assign}>Assign</button>
+        <div className="form-group">
+          <label>🏢 Company Name</label>
+          <input
+            placeholder="Enter company name"
+            value={company}
+            onChange={(e) => setCompany(e.target.value)}
+          />
+        </div>
+
+        <div className="form-group">
+          <label>🔍 SPOC Name</label>
+          <input
+            placeholder="Type SPOC name"
+            value={query}
+            onChange={(e) => search(e.target.value)}
+          />
+
+          {results.length > 0 && (
+            <ul className="suggestions">
+              {results.map((u, i) => (
+                <li
+                  key={i}
+                  onClick={() => {
+                    setSelected(u);
+                    setQuery(u.name);
+                    setResults([]);
+                  }}
+                >
+                  <span className="name">👤 {u.name}</span>
+                  <span className="email">{u.email}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        {selected && (
+          <div className="selected-box">
+            ✅ Selected SPOC: <b>{selected.name}</b>
+          </div>
+        )}
+
+        <button className="primary-btn" onClick={assign}>
+          🚀 Assign SPOC
+        </button>
+      </div>
     </div>
   );
 }

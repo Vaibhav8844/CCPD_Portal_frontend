@@ -1,40 +1,42 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
+import { api } from "../api/client";
 
-const AuthContext = createContext();
+const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-  const [token, setToken] = useState(null);
-  const [role, setRole] = useState(null);
+  const [auth, setAuth] = useState(() => {
+    const saved =
+      localStorage.getItem("auth") || sessionStorage.getItem("auth");
+    return saved ? JSON.parse(saved) : null;
+  });
 
-  // Load from localStorage on refresh
-  useEffect(() => {
-    const savedToken = localStorage.getItem("token");
-    const savedRole = localStorage.getItem("role");
+  const login = async (username, password, rememberMe) => {
+  const res = await api.post("/auth/login", { username, password,rememberMe });
 
-    if (savedToken && savedRole) {
-      setToken(savedToken);
-      setRole(savedRole);
-    }
-  }, []);
+  const authData = res.data;
 
-  const login = (token, role) => {
-    setToken(token);
-    setRole(role);
-    localStorage.setItem("token", token);
-    localStorage.setItem("role", role);
-  };
+  setAuth(authData);
+
+  if (rememberMe) {
+    localStorage.setItem("auth", JSON.stringify(authData));
+  }
+
+  return authData;   // ✅ THIS FIXES THE ERROR
+};
 
   const logout = () => {
-    setToken(null);
-    setRole(null);
-    localStorage.clear();
+    setAuth(null);
+    localStorage.removeItem("auth");
+    sessionStorage.removeItem("auth");
   };
 
   return (
-    <AuthContext.Provider value={{ token, role, login, logout }}>
+    <AuthContext.Provider value={{ auth, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
 }
 
-export const useAuth = () => useContext(AuthContext);
+export function useAuth() {
+  return useContext(AuthContext);
+}

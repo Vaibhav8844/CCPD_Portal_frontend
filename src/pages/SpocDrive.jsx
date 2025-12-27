@@ -2,6 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { api } from "../api/client";
 import { useAuth } from "../auth/AuthContext";
+import "./styles/SpocDrive.css";
 
 const EMPTY_FORM = {
   type: "Both",
@@ -18,7 +19,7 @@ const EMPTY_FORM = {
 
 export default function SpocDrive() {
   const { company } = useParams();
-  const { token } = useAuth();
+  const { auth } = useAuth();
   const navigate = useNavigate();
 
   const [requestId, setRequestId] = useState(null);
@@ -38,7 +39,7 @@ export default function SpocDrive() {
   useEffect(() => {
     api
       .get("/drives/my", {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${auth.token}` },
       })
       .then((res) => {
         const drive = res.data.drives.find((d) => d.company === company);
@@ -47,7 +48,7 @@ export default function SpocDrive() {
         if (drive.request_id) {
           api
             .get(`/drives/results/${drive.request_id}`, {
-              headers: { Authorization: `Bearer ${token}` },
+              headers: { Authorization: `Bearer ${auth.token}` },
             })
             .then((res) => {
               setResults(res.data.results || "");
@@ -83,7 +84,7 @@ export default function SpocDrive() {
           expected_hires: drive.expected_hires || "",
         });
       });
-  }, [company, token]);
+  }, [company, auth.token]);
 
   // ---------- CHANGE ----------
   const handleChange = (e) => {
@@ -96,23 +97,25 @@ export default function SpocDrive() {
     !slotStatus || slotStatus === "REJECTED" || slotStatus === "SUGGESTED";
 
   // ---------- SUBMIT ----------
-  const submit = async () => {
-    const payload = {
-      request_id: requestId,
-      company,
-      ...form,
-    };
-
-    const res = await api.post("/drives/request", payload, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-
-    if (!requestId) {
-      setRequestId(res.data.request_id);
-    }
-
-    alert("Drive details saved");
+const submit = async () => {
+  const payload = {
+    request_id: requestId,
+    company,
+    spoc: auth.username,   // ✅ ADD THIS
+    ...form,
   };
+
+  const res = await api.post("/drives/request", payload, {
+    headers: { Authorization: `Bearer ${auth.token}` },
+  });
+
+  if (!requestId) {
+    setRequestId(res.data.request_id);
+  }
+
+  alert("Drive details saved");
+};
+
   const canPublishResults =
     status?.drive_status === "Completed" &&
     status?.ppt_status === "APPROVED" &&
@@ -121,9 +124,15 @@ export default function SpocDrive() {
 
   // ---------- UI ----------
   return (
-    <div>
-      <button onClick={() => navigate("/spoc")}>⬅ Back</button>
-      <h2>{company} – Drive Request</h2>
+    <div className="spoc-drive-page">
+  <div className="drive-card">
+    <button className="back-btn" onClick={() => navigate("/spoc")}>
+      ⬅ Back
+    </button>
+
+    <div className="drive-title">
+      {company} – Drive Request
+    </div>
 
       <hr />
 
@@ -138,11 +147,11 @@ export default function SpocDrive() {
           await api.post(
             "/drives/status",
             { request_id: requestId, status: newStatus },
-            { headers: { Authorization: `Bearer ${token}` } }
+            { headers: { Authorization: `Bearer ${auth.token}` } }
           );
 
           const res = await api.get("/drives/my", {
-            headers: { Authorization: `Bearer ${token}` },
+            headers: { Authorization: `Bearer ${auth.token}` },
           });
 
           setStatus((prev) => ({
@@ -312,7 +321,7 @@ export default function SpocDrive() {
                   request_id: requestId,
                   results,
                 },
-                { headers: { Authorization: `Bearer ${token}` } }
+                { headers: { Authorization: `Bearer ${auth.token}` } }
               );
 
               alert("Results published successfully");
@@ -323,5 +332,6 @@ export default function SpocDrive() {
         </>
       )}
     </div>
+</div>
   );
 }

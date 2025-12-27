@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { api } from "../api/client";
 import { useAuth } from "../auth/AuthContext";
 import { useNavigate } from "react-router-dom";
+import "./styles/SpocHome.css";
 
 function computeStatus(drive) {
   if (!drive) return { label: "Not Requested", color: "gray" };
@@ -18,67 +19,86 @@ function computeStatus(drive) {
 }
 
 export default function SpocHome() {
-  const { token, logout } = useAuth();
+  const { auth, logout } = useAuth();   // ✅ FIXED
   const [companies, setCompanies] = useState([]);
   const [driveMap, setDriveMap] = useState({});
-  const [drives, setDrives] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!auth?.token) return;   // ✅ WAIT until auth is ready
+
     async function load() {
       const [companiesRes, drivesRes] = await Promise.all([
         api.get("/companies/my", {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { Authorization: `Bearer ${auth.token}` },
         }),
-        api
-          .get("/drives/my", {
-            headers: { Authorization: `Bearer ${token}` },
-          })
+        api.get("/drives/my", {
+          headers: { Authorization: `Bearer ${auth.token}` },
+        }),
       ]);
 
-      setCompanies(companiesRes.data.companies);
+      setCompanies(companiesRes.data.companies || []);
 
       const map = {};
-      drivesRes.data.drives.forEach((d) => {
+      drivesRes.data.drives?.forEach((d) => {
         map[d.company] = d;
       });
       setDriveMap(map);
     }
+
     load();
-  }, []);
+  }, [auth]);   // ✅ DEPENDENCY FIX
 
   return (
-    <div>
-      <h2>SPOC Dashboard</h2>
-      <button onClick={logout}>Logout</button>
-
-      <hr />
-
-      <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
-        {companies.map((company, i) => {
-          const status = computeStatus(driveMap[company]);
-
-          return (
-            <div
-              key={i}
-              onClick={() => navigate(`/spoc/${company}`)}
-              style={{
-                border: "1px solid #ccc",
-                padding: 16,
-                width: 260,
-                cursor: "pointer",
-                borderRadius: 8,
-              }}
-            >
-              <h3>{company}</h3>
-              <p>
-                <b>Status:</b>{" "}
-                <span style={{ color: status.color }}>{status.label}</span>
-              </p>
-            </div>
-          );
-        })}
+    <div className="spoc-page">
+      <div className="spoc-header">
+        <h2 className="spoc-title">📊 SPOC Dashboard</h2>
+        <button className="logout-btn" onClick={logout}>
+          🚪 Logout
+        </button>
       </div>
+
+      {/* ✅ WELCOME SECTION */}
+      <div className="welcome-box">
+        <div className="welcome-text">
+          👋 Welcome,{" "}
+          <span>{auth?.username || "SPOC"}</span>
+          <span className="role-pill">{auth?.role}</span>
+        </div>
+
+        <div className="sub-text">
+          Following are your allotted drives
+        </div>
+      </div>
+
+      {/* ✅ CARDS */}
+      {companies.length === 0 ? (
+        <div className="empty-state">No companies assigned yet 💤</div>
+      ) : (
+        <div className="company-grid">
+          {companies.map((company, i) => {
+            const status = computeStatus(driveMap[company]);
+
+            return (
+              <div
+                key={i}
+                className="company-card"
+                onClick={() => navigate(`/spoc/${company}`)}
+              >
+                <div className="company-name">{company}</div>
+
+                <div className={`status-pill status-${status.color}`}>
+                  {status.color === "green" && "✅"}
+                  {status.color === "orange" && "🟠"}
+                  {status.color === "blue" && "⏳"}
+                  {status.color === "gray" && "📝"}
+                  {status.label}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
