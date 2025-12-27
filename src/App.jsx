@@ -22,10 +22,8 @@ export default function App() {
           <Route
             path="/spoc/*"
             element={
-              <ProtectedRoute>
-                <RoleRoute allowedRoles={["SPOC"]}>
-                  <Spoc />
-                </RoleRoute>
+              <ProtectedRoute role="SPOC">
+                <Spoc />
               </ProtectedRoute>
             }
           />
@@ -33,10 +31,8 @@ export default function App() {
           <Route
             path="/calendar"
             element={
-              <ProtectedRoute>
-                <RoleRoute allowedRoles={["CALENDAR_TEAM"]}>
-                  <Calendar />
-                </RoleRoute>
+              <ProtectedRoute role="CALENDAR_TEAM">
+                <Calendar />
               </ProtectedRoute>
             }
           />
@@ -44,10 +40,8 @@ export default function App() {
           <Route
             path="/calendar-dashboard"
             element={
-              <ProtectedRoute>
-                <RoleRoute allowedRoles={["CALENDAR_TEAM"]}>
-                  <CalendarDashboard />
-                </RoleRoute>
+              <ProtectedRoute role="CALENDAR_TEAM">
+                <CalendarDashboard />
               </ProtectedRoute>
             }
           />
@@ -55,10 +49,8 @@ export default function App() {
           <Route
             path="/completed-approvals"
             element={
-              <ProtectedRoute>
-                <RoleRoute allowedRoles={["CALENDAR_TEAM"]}>
-                  <CompletedApprovals />
-                </RoleRoute>
+              <ProtectedRoute role="CALENDAR_TEAM">
+                <CompletedApprovals />
               </ProtectedRoute>
             }
           />
@@ -66,20 +58,16 @@ export default function App() {
           <Route
             path="/assign-spoc"
             element={
-              <ProtectedRoute>
-                <RoleRoute allowedRoles={["CALENDAR_TEAM"]}>
-                  <AssignSpoc />
-                </RoleRoute>
+              <ProtectedRoute role="CALENDAR_TEAM">
+                <AssignSpoc />
               </ProtectedRoute>
             }
           />
           <Route
             path="/view-calendar"
             element={
-              <ProtectedRoute>
-                <RoleRoute allowedRoles={["CALENDAR_TEAM"]}>
-                  <ViewCalendar />
-                </RoleRoute>
+              <ProtectedRoute role="CALENDAR_TEAM">
+                <ViewCalendar />
               </ProtectedRoute>
             }
           />

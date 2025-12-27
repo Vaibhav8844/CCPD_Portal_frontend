@@ -45,6 +45,7 @@ export default function ViewCalendar() {
         <FullCalendar
           plugins={[dayGridPlugin]}
           initialView="dayGridMonth"
+          dayMaxEvents={3}
           events={events}
           height="70vh"
           headerToolbar={{
@@ -85,7 +86,8 @@ export default function ViewCalendar() {
 function buildEvent(company, type, date, color) {
   return {
     title: `${company.company} – ${type}`,
-    date,
+    start: date,
+    allDay: false,
     backgroundColor: color,
     borderColor: color,
     textColor: "#fff",
