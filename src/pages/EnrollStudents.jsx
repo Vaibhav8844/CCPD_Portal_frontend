@@ -1,0 +1,137 @@
+import { useState, useEffect } from "react";
+import "./styles/EnrollStudents.css";
+import { api } from "../api/client";
+import { useAuth } from "../auth/AuthContext";
+
+export default function EnrollStudents() {
+  const { auth } = useAuth();
+
+  const [file, setFile] = useState(null);
+  const [year, setYear] = useState("2025");
+  const [branch, setBranch] = useState("CSE");
+  const [degreeType, setDegreeType] = useState("UG");
+  const [program, setProgram] = useState("BTech");
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+
+  /* ✅ AUTH GUARD — TOP LEVEL */
+  useEffect(() => {
+    if (!auth?.token) {
+      setMessage("⏳ Waiting for authentication...");
+    }
+  }, [auth]);
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+
+    /* ✅ HARD AUTH CHECK */
+    if (!auth?.token) {
+      setMessage("❌ You are not authenticated. Please login again.");
+      return;
+    }
+
+    if (!file) {
+      setMessage("❌ Please upload an Excel file");
+      return;
+    }
+
+    setLoading(true);
+    setMessage("");
+
+    try {
+      const form = new FormData();
+      form.append("file", file);
+      form.append("year", year);
+      form.append("branch", branch);
+      form.append("degreeType", degreeType);
+      form.append("program", program);
+
+      const res = await api.post(
+        "/data/enroll/students",
+        form,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      const data = res.data;
+
+      setMessage(
+        `✅ Enrolled ${data.inserted} students into ${data.workbook} (${data.sheet})`
+      );
+      setFile(null);
+    } catch (err) {
+      setMessage(
+        err.response?.data?.error || "❌ Enrollment failed"
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div className="enroll-page">
+      <h1>🧑‍🎓 Enroll Students</h1>
+      <p className="subtitle">
+        Upload Excel file and enroll students into Google Sheets
+      </p>
+
+      <form className="enroll-form" onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label>Academic Year</label>
+          <select value={year} onChange={(e) => setYear(e.target.value)}>
+            <option value="2025">2025-26</option>
+            <option value="2024">2024-25</option>
+          </select>
+        </div>
+
+        <div className="form-group">
+          <label>Degree Type</label>
+          <select
+            value={degreeType}
+            onChange={(e) => setDegreeType(e.target.value)}
+          >
+            <option value="UG">UG</option>
+            <option value="PG">PG</option>
+          </select>
+        </div>
+
+        <div className="form-group">
+          <label>Program</label>
+          <select value={program} onChange={(e) => setProgram(e.target.value)}>
+            <option value="BTech">BTech</option>
+            <option value="MTech">MTech</option>
+          </select>
+        </div>
+
+        <div className="form-group">
+          <label>Branch</label>
+          <select value={branch} onChange={(e) => setBranch(e.target.value)}>
+            <option value="CSE">CSE</option>
+            <option value="ECE">ECE</option>
+            <option value="EE">EE</option>
+            <option value="ME">ME</option>
+          </select>
+        </div>
+
+        <div className="form-group">
+          <label>Excel File</label>
+          <input
+            type="file"
+            accept=".xlsx,.xls"
+            onChange={(e) => setFile(e.target.files[0])}
+          />
+        </div>
+
+        <button type="submit" disabled={loading || !auth?.token}>
+          {loading ? "Enrolling..." : "Enroll Students"}
+        </button>
+
+        {message && <div className="form-message">{message}</div>}
+      </form>
+    </div>
+  );
+}

@@ -8,6 +8,9 @@ import AssignSpoc from "./pages/AssignSpoc";
 import CalendarDashboard from "./pages/CalendarDashboard";
 import CompletedApprovals from "./pages/CompletedApprovals";
 import ViewCalendar from "./pages/ViewCalendar";
+import DataTeamDashboard from "./pages/DataTeamDashboard";
+import AnalyticsDashboard from "./pages/Analytics/AnalyticsDashboard";
+import EnrollStudents from "./pages/EnrollStudents";
 
 import ProtectedRoute from "./guards/ProtectedRoute";
 import RoleRoute from "./guards/RoleRoute";
@@ -71,6 +74,16 @@ export default function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/data-dashboard"
+            element={
+              <ProtectedRoute role="DATA_TEAM">
+                <DataTeamDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/data/analytics" element={<AnalyticsDashboard />} />
+          <Route path="/data/enroll/students" element={<ProtectedRoute role="DATA_TEAM"><EnrollStudents /></ProtectedRoute>} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

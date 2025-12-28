@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/AuthContext";
 import "./styles/CommonDashboard.css";
 
-export default function CalendarDashboard() {
+export default function DataTeamDashboard() {
   const navigate = useNavigate();
   const { logout, auth } = useAuth();
 
@@ -20,7 +20,7 @@ export default function CalendarDashboard() {
     <div className="dashboard-wrapper">
       {/* ---------- HEADER ---------- */}
       <div className="dashboard-header">
-        <h1>📊 Calendar Team Dashboard</h1>
+        <h1>📊 Data Team Dashboard</h1>
 
         <button className="logout-btn" onClick={logout}>
           🚪 Logout
@@ -29,7 +29,7 @@ export default function CalendarDashboard() {
 
       <div className="welcome-box">
         <div className="welcome-text">
-          👋 Welcome, <span>{auth?.name || "Calendar Team Member"}</span>
+          👋 Welcome, <span>{auth?.name || "Data Team Member"}</span>
           <span className="role-pill">{auth?.role}</span>
         </div>
 
@@ -41,24 +41,17 @@ export default function CalendarDashboard() {
       {/* ---------- CARDS ---------- */}
       <div className="dashboard-grid">
         <Card
-          title="Assign SPOC"
-          description="Assign companies to SPOCs"
-          path="/assign-spoc"
-          icon="🧑‍💼"
+          title="Manage Placement Sheets"
+          description="Access and manage all placement-related sheets"
+          path="/data/sheets"
+          icon="📊"
         />
 
         <Card
-          title="Approve Dates"
-          description="Approve, reject or suggest drive dates"
-          path="/calendar"
-          icon="✅"
-        />
-
-        <Card
-          title="Completed Approvals"
-          description="View drives that are fully approved"
-          path="/completed-approvals"
-          icon="📄"
+          title="Recompute Statistics"
+          description="Recalculate placement stats for branches and batches"
+          path="/data/recompute"
+          icon="📈"
         />
 
         <Card
@@ -67,13 +60,19 @@ export default function CalendarDashboard() {
           path="/spoc"
           icon="🏢"
         />
-
         <Card
-          title="View Calendar"
-          description="Visual calendar of all company drives"
-          path="/view-calendar"
-          icon="📅"
-        />
+  title="Placement Analytics"
+  description="View branch-wise and overall placement statistics"
+  path="/data/analytics"
+  icon="📈"
+/>
+
+<Card
+  title="Enroll Students"
+  description="Upload Excel and enroll students into UG / PG workbooks"
+  path="/data/enroll/students"
+  icon="🧑‍🎓"
+/>
       </div>
     </div>
   );

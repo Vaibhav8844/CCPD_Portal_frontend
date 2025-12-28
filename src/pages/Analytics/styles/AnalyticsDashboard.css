@@ -1,0 +1,112 @@
+/* ---------- PAGE ---------- */
+.analytics-page {
+  padding: 24px 32px;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #0f172a, #020617);
+  color: #e5e7eb;
+}
+
+/* ---------- HEADER ---------- */
+.analytics-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+}
+
+.analytics-header h1 {
+  font-size: 26px;
+  font-weight: 600;
+  color: #f8fafc;
+  letter-spacing: 0.3px;
+}
+
+/* ---------- BRANCH FILTER ---------- */
+.branch-filter {
+  padding: 10px 14px;
+  font-size: 14px;
+  border-radius: 10px;
+  border: 1px solid #334155;
+  background: #020617;
+  color: #e5e7eb;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.branch-filter option {
+  background: #020617;
+  color: #e5e7eb;
+}
+
+.branch-filter:hover {
+  border-color: #6366f1;
+}
+
+.branch-filter:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.25);
+}
+
+/* ---------- LOADING / EMPTY ---------- */
+.analytics-loading {
+  padding: 48px;
+  text-align: center;
+  font-size: 18px;
+  color: #94a3b8;
+}
+
+/* ---------- ANALYTICS CARD OVERRIDE ---------- */
+/* Makes sure the overview card matches dark theme */
+
+.analytics-page .bg-white {
+  background: #020617 !important;
+  border: 1px solid #1e293b;
+}
+
+.analytics-page h2,
+.analytics-page h3 {
+  color: #f1f5f9;
+}
+
+/* KPI cards */
+.analytics-page .bg-gray-50 {
+  background: linear-gradient(180deg, #020617, #020617);
+  border: 1px solid #1e293b;
+}
+
+.analytics-page .text-gray-500 {
+  color: #94a3b8 !important;
+}
+
+.analytics-page .text-gray-900 {
+  color: #f8fafc !important;
+}
+
+/* ---------- CHART TOOLTIP ---------- */
+.recharts-tooltip-wrapper {
+  font-size: 13px;
+}
+
+.recharts-default-tooltip {
+  background-color: #020617 !important;
+  border: 1px solid #334155 !important;
+  color: #e5e7eb !important;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 768px) {
+  .analytics-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .analytics-header h1 {
+    font-size: 22px;
+  }
+
+  .branch-filter {
+    width: 100%;
+  }
+}

@@ -44,6 +44,7 @@ export default function SpocHome() {
         map[d.company] = d;
       });
       setDriveMap(map);
+      console.log(auth)
     }
 
     load();
@@ -62,7 +63,7 @@ export default function SpocHome() {
       <div className="welcome-box">
         <div className="welcome-text">
           👋 Welcome,{" "}
-          <span>{auth?.username || "SPOC"}</span>
+          <span>{auth?.name || "SPOC"}</span>
           <span className="role-pill">{auth?.role}</span>
         </div>
 
