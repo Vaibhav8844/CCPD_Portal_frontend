@@ -35,7 +35,7 @@ export default function Login() {
       );
 
       // 🔁 Role-based redirect
-      if (user.role === "ADMIN") navigate("/assign-spoc");
+      if (user.role === "ADMIN") navigate("/admin");
       else if (user.role === "CALENDAR_TEAM") navigate("/calendar-dashboard");
       else if (user.role === "DATA_TEAM") navigate("/data-dashboard");
       else if (user.role === "SPOC") navigate("/spoc");

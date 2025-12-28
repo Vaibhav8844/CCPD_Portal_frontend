@@ -2,17 +2,23 @@ import { useState, useEffect } from "react";
 import "./styles/EnrollStudents.css";
 import { api } from "../api/client";
 import { useAuth } from "../auth/AuthContext";
+import { getAcademicYear } from "../api/academicYear";
 
 export default function EnrollStudents() {
   const { auth } = useAuth();
 
   const [file, setFile] = useState(null);
-  const [year, setYear] = useState("2025");
+  const [academicYear, setAcademicYear] = useState("");
   const [branch, setBranch] = useState("CSE");
   const [degreeType, setDegreeType] = useState("UG");
   const [program, setProgram] = useState("BTech");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+
+  // Fetch academic year from backend
+  useEffect(() => {
+    getAcademicYear().then(setAcademicYear);
+  }, []);
 
   /* ✅ AUTH GUARD — TOP LEVEL */
   useEffect(() => {
@@ -41,7 +47,7 @@ export default function EnrollStudents() {
     try {
       const form = new FormData();
       form.append("file", file);
-      form.append("year", year);
+      // Do NOT send year; backend will use admin-set year
       form.append("branch", branch);
       form.append("degreeType", degreeType);
       form.append("program", program);
@@ -82,10 +88,7 @@ export default function EnrollStudents() {
       <form className="enroll-form" onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Academic Year</label>
-          <select value={year} onChange={(e) => setYear(e.target.value)}>
-            <option value="2025">2025-26</option>
-            <option value="2024">2024-25</option>
-          </select>
+          <div style={{ fontSize: 16, fontWeight: 500, marginTop: 4 }}>{academicYear || "-"}</div>
         </div>
 
         <div className="form-group">

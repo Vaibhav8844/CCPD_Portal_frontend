@@ -11,6 +11,8 @@ import ViewCalendar from "./pages/ViewCalendar";
 import DataTeamDashboard from "./pages/DataTeamDashboard";
 import AnalyticsDashboard from "./pages/Analytics/AnalyticsDashboard";
 import EnrollStudents from "./pages/EnrollStudents";
+import Admin from "./pages/Admin";
+import AdminAssociates from "./pages/AdminAssociates";
 
 import ProtectedRoute from "./guards/ProtectedRoute";
 import RoleRoute from "./guards/RoleRoute";
@@ -84,6 +86,22 @@ export default function App() {
           />
           <Route path="/data/analytics" element={<AnalyticsDashboard />} />
           <Route path="/data/enroll/students" element={<ProtectedRoute role="DATA_TEAM"><EnrollStudents /></ProtectedRoute>} />
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute role="ADMIN">
+                  <Admin />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/associates"
+              element={
+                <ProtectedRoute role="ADMIN">
+                  <AdminAssociates />
+                </ProtectedRoute>
+              }
+            />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
