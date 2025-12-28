@@ -7,10 +7,17 @@ import "./styles/SpocHome.css";
 function computeStatus(drive) {
   if (!drive) return { label: "Not Requested", color: "gray" };
 
+  if (drive.drive_status === "Ongoing") {
+    return { label: "Ongoing", color: "orange" };
+  }
+  if (drive.drive_status === "Completed") {
+    return { label: "Completed", color: "green" };
+  }
+
   const statuses = [drive.ppt_status, drive.ot_status, drive.interview_status];
 
   if (statuses.every((s) => s === "APPROVED"))
-    return { label: "Fully Approved", color: "green" };
+    return { label: "Scheduled", color: "green" };
 
   if (statuses.some((s) => s === "APPROVED"))
     return { label: "Partially Approved", color: "orange" };

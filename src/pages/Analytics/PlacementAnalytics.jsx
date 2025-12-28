@@ -529,49 +529,82 @@ export default function AnalyticsDashboard() {
 
         <div className="snapshot-section">
           <h3>Overall Statistics</h3>
-          {renderOverallStats()}
-        </div>
-
-        <div className="snapshot-section">
-          <h3>CTC Distribution</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={data.ctcDistribution}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="range" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="count" fill="#0088FE" />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-
-        <div className="snapshot-section">
-          <h3>Top Companies</h3>
-          <div className="company-grid">
-            {data.topCompanies.slice(0, 10).map((company, idx) => (
-              <div key={idx} className="company-card">
-                <h4>{company.company}</h4>
-                <p>Offers: {company.offers}</p>
-                <p>Avg: ₹{company.averageCTC} LPA</p>
+          {data.overall && (
+            <div className="stats-grid">
+              <div className="stat-card">
+                <h3>Total Students</h3>
+                <div className="stat-value">{data.overall.totalStudents}</div>
               </div>
-            ))}
-          </div>
+              <div className="stat-card">
+                <h3>Total Placed</h3>
+                <div className="stat-value">{data.overall.totalPlaced}</div>
+              </div>
+              <div className="stat-card">
+                <h3>Placement %</h3>
+                <div className="stat-value">{data.overall.placementPercentage}%</div>
+              </div>
+              <div className="stat-card">
+                <h3>Average CTC</h3>
+                <div className="stat-value">₹{data.overall.averageCTC} LPA</div>
+              </div>
+              <div className="stat-card">
+                <h3>Highest CTC</h3>
+                <div className="stat-value">₹{data.overall.highestCTC} LPA</div>
+              </div>
+              <div className="stat-card">
+                <h3>Eligible Pool</h3>
+                <div className="stat-value">{data.overall.eligiblePool}</div>
+              </div>
+            </div>
+          )}
         </div>
 
-        <div className="snapshot-section">
-          <h3>Historical Trends</h3>
-          <ResponsiveContainer width="100%" height={250}>
-            <LineChart data={data.trends}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="academicYear" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Line type="monotone" dataKey="placed" stroke="#82ca9d" name="Placed" />
-              <Line type="monotone" dataKey="averageCTC" stroke="#0088FE" name="Avg CTC" />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
+        {data.ctcDistribution && (
+          <div className="snapshot-section">
+            <h3>CTC Distribution</h3>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={data.ctcDistribution}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="range" />
+                <YAxis />
+                <Tooltip />
+                <Bar dataKey="count" fill="#0088FE" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        )}
+
+        {data.topCompanies && data.topCompanies.length > 0 && (
+          <div className="snapshot-section">
+            <h3>Top Companies</h3>
+            <div className="company-grid">
+              {data.topCompanies.slice(0, 10).map((company, idx) => (
+                <div key={idx} className="company-card">
+                  <h4>{company.company}</h4>
+                  <p>Offers: {company.offers}</p>
+                  <p>Avg: ₹{company.averageCTC} LPA</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {data.trends && data.trends.length > 0 && (
+          <div className="snapshot-section">
+            <h3>Historical Trends</h3>
+            <ResponsiveContainer width="100%" height={250}>
+              <LineChart data={data.trends}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="academicYear" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Line type="monotone" dataKey="placed" stroke="#82ca9d" name="Placed" />
+                <Line type="monotone" dataKey="averageCTC" stroke="#0088FE" name="Avg CTC" />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        )}
       </div>
     );
   };

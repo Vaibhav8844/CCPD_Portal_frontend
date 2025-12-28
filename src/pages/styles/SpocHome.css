@@ -17,13 +17,14 @@
 .spoc-header .logout-btn {
   font-size: 14px;
   line-height: 1;
-  padding: 6px 10px;
+  padding: 10px 18px;
   height: auto;
   min-width: 0;
   width: auto;
   white-space: nowrap;
   align-self: center;
   border-radius: 6px;
+  font-weight: 600;
 }
 
 .spoc-title {
@@ -57,7 +58,7 @@
 
 /* ===== Card ===== */
 .company-card {
-  background: rgba(255, 255, 255, 0.08);
+  background: #020617 !important;
   backdrop-filter: blur(14px);
   border-radius: 16px;
   padding: 20px;

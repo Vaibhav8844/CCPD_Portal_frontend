@@ -9,7 +9,6 @@ import CalendarDashboard from "./pages/CalendarDashboard";
 import CompletedApprovals from "./pages/CompletedApprovals";
 import ViewCalendar from "./pages/ViewCalendar";
 import DataTeamDashboard from "./pages/DataTeamDashboard";
-import AnalyticsDashboard from "./pages/Analytics/AnalyticsDashboard";
 import PlacementAnalytics from "./pages/Analytics/PlacementAnalytics";
 import EnrollStudents from "./pages/EnrollStudents";
 import Admin from "./pages/Admin";
@@ -85,7 +84,6 @@ export default function App() {
               </ProtectedRoute>
             }
           />
-          <Route path="/data/analytics" element={<AnalyticsDashboard />} />
           <Route path="/data/enroll/students" element={<ProtectedRoute role="DATA_TEAM"><EnrollStudents /></ProtectedRoute>} />
             <Route
               path="/admin"

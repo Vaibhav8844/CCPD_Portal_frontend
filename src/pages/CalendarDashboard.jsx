@@ -57,7 +57,7 @@ export default function CalendarDashboard() {
     <div className="dashboard-wrapper">
       {/* ---------- HEADER ---------- */}
       <div className="dashboard-header">
-        <h1>📊 Calendar Team Dashboard</h1>
+        <h2 className="dashboard-title">📊 Calendar Team Dashboard</h2>
 
         <button className="logout-btn" onClick={logout}>
           🚪 Logout

@@ -53,6 +53,18 @@
   font-size: 20px;
   font-weight: 600;
 }
+.fc-popover {
+  background-color: #0f172a !important;
+  border: 1px solid #444 !important;
+  border-radius: 5px !important;
+  color: #ffffff;
+}
+
+.fc-popover-header {
+  background-color: #020617 !important;
+  color: #ffffff !important;
+  font-weight: 600;
+}
 
 .fc-button {
   background: transparent !important;
