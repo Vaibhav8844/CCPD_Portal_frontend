@@ -73,6 +73,13 @@ export default function DataTeamDashboard() {
   path="/data/enroll/students"
   icon="🧑‍🎓"
 />
+
+        <Card
+          title="New Analytics Dashboard"
+          description="Comprehensive placement visualization and trends"
+          path="/analytics"
+          icon="📊"
+        />
       </div>
     </div>
   );

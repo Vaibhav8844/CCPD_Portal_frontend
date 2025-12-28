@@ -9,7 +9,7 @@ export default function EnrollStudents() {
 
   const [file, setFile] = useState(null);
   const [academicYear, setAcademicYear] = useState("");
-  const [branch, setBranch] = useState("CSE");
+  const [branch, setBranch] = useState("CS");
   const [degreeType, setDegreeType] = useState("UG");
   const [program, setProgram] = useState("BTech");
   const [loading, setLoading] = useState(false);
@@ -113,10 +113,10 @@ export default function EnrollStudents() {
         <div className="form-group">
           <label>Branch</label>
           <select value={branch} onChange={(e) => setBranch(e.target.value)}>
-            <option value="CSE">CSE</option>
-            <option value="ECE">ECE</option>
-            <option value="EE">EE</option>
-            <option value="ME">ME</option>
+            <option value="CS">CS - Computer Science</option>
+            <option value="EC">EC - Electronics & Communication</option>
+            <option value="EE">EE - Electrical Engineering</option>
+            <option value="ME">ME - Mechanical Engineering</option>
           </select>
         </div>
 

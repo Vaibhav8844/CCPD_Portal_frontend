@@ -26,6 +26,7 @@ export default function SpocDrive() {
   const [status, setStatus] = useState(null);
   const [form, setForm] = useState(EMPTY_FORM);
   const [results, setResults] = useState("");
+  const [isPublishing, setIsPublishing] = useState(false);
 
   const driveCompleted = status?.drive_status === "Completed";
 
@@ -315,19 +316,29 @@ const submit = async () => {
                 return;
               }
 
-              await api.post(
-                "/drives/results",
-                {
-                  request_id: requestId,
-                  results,
-                },
-                { headers: { Authorization: `Bearer ${auth.token}` } }
-              );
+              setIsPublishing(true);
+              try {
+                await api.post(
+                  "/drives/results",
+                  {
+                    request_id: requestId,
+                    results,
+                  },
+                  { headers: { Authorization: `Bearer ${auth.token}` } }
+                );
 
-              alert("Results published successfully");
+                alert("Results published successfully");
+                window.location.reload();
+              } catch (error) {
+                console.error("Publish error:", error);
+                alert("Failed to publish results. Please try again.");
+              } finally {
+                setIsPublishing(false);
+              }
             }}
+            disabled={isPublishing}
           >
-            Publish Results
+            {isPublishing ? "Publishing..." : "Publish Results"}
           </button>
         </>
       )}

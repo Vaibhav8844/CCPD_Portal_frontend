@@ -111,6 +111,13 @@ export default function CalendarDashboard() {
         />
 
         <Card
+          title="Placement Analytics"
+          description="Visualize placement statistics and trends"
+          path="/analytics"
+          icon="📊"
+        />
+
+        <Card
           title={initialized ? "Calendar Initialized" : "Initialize Calendar"}
           description={
             initialized

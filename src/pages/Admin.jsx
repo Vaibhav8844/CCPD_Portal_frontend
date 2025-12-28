@@ -80,6 +80,13 @@ export default function Admin() {
 					path="/admin/associates"
 					icon="👥"
 				/>
+
+				<Card
+					title="Placement Analytics"
+					description="Visualize placement statistics and trends"
+					path="/analytics"
+					icon="📊"
+				/>
 			</div>
 		</div>
 	);

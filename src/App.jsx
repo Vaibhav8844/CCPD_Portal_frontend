@@ -10,6 +10,7 @@ import CompletedApprovals from "./pages/CompletedApprovals";
 import ViewCalendar from "./pages/ViewCalendar";
 import DataTeamDashboard from "./pages/DataTeamDashboard";
 import AnalyticsDashboard from "./pages/Analytics/AnalyticsDashboard";
+import PlacementAnalytics from "./pages/Analytics/PlacementAnalytics";
 import EnrollStudents from "./pages/EnrollStudents";
 import Admin from "./pages/Admin";
 import AdminAssociates from "./pages/AdminAssociates";
@@ -100,6 +101,14 @@ export default function App() {
                 <ProtectedRoute role="ADMIN">
                   <AdminAssociates />
                 </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/analytics"
+              element={
+                <RoleRoute allowedRoles={["ADMIN", "CALENDAR_TEAM", "DATA_TEAM"]}>
+                  <PlacementAnalytics />
+                </RoleRoute>
               }
             />
         </Routes>
